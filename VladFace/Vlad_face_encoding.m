@@ -93,3 +93,22 @@ for i=1:length(y)
     text(y(i,1) ,y(i,2), y(i,3),sprintf('%d',labels(i)));
 end
 title('Classic MDS')
+
+%% Classify images
+% Create Labels
+Labels = ceil([1:400]./40)
+train_id = repmat(indTrain(:),[40 1]);
+
+c=kclassify(vecs(train_id==0,:),vecs(train_id==1,:),Labels(train_id==1),1);
+
+%% visualize classification
+figure;
+stem(c) % predictions
+hold on
+stem(Labels(train_id==1),'g') % ground truth
+
+
+%% Compute score
+score= sum(c'==Labels(train_id==1))/length(c);
+
+fprintf('Classification Rate is %2.2f \n',score)
